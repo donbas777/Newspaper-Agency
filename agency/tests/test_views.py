@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.models import Driver, Manufacturer, Car
+from agency.models import Redactor, Topic, Newspaper
 
-INDEX_URL = reverse("taxi:index")
-MANUFACTURER_URL = reverse("taxi:manufacturer-list")
-CAR_URL = reverse("taxi:car-list")
-DRIVER_URL = reverse("taxi:driver-list")
+INDEX_URL = reverse("agency:index")
+TOPIC_URL = reverse("agency:topic-list")
+NEWSPAPER_URL = reverse("agency:newspaper-list")
+REDACTOR_URL = reverse("agency:redactor-list")
 
 
 class PublicTest(TestCase):
@@ -15,16 +15,16 @@ class PublicTest(TestCase):
         res = self.client.get(INDEX_URL)
         self.assertNotEquals(res.status_code, 200)
 
-    def test_car_login_required(self):
-        res = self.client.get(CAR_URL)
+    def test_newspaper_login_required(self):
+        res = self.client.get(NEWSPAPER_URL)
         self.assertNotEquals(res.status_code, 200)
 
-    def test_manufacturer_login_required(self):
-        res = self.client.get(MANUFACTURER_URL)
+    def test_topic_login_required(self):
+        res = self.client.get(TOPIC_URL)
         self.assertNotEquals(res.status_code, 200)
 
-    def test_driver_login_required(self):
-        res = self.client.get(DRIVER_URL)
+    def test_redactor_login_required(self):
+        res = self.client.get(REDACTOR_URL)
         self.assertNotEquals(res.status_code, 200)
 
 
@@ -36,56 +36,53 @@ class PrivateTest(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_retrieve_manufacturer(self):
-        Manufacturer.objects.create(
+    def test_retrieve_topic(self):
+        Topic.objects.create(
             name="test1",
-            country="Test1"
         )
-        Manufacturer.objects.create(
+        Topic.objects.create(
             name="test2",
-            country="Test2"
         )
-        manufacturers = Manufacturer.objects.all()
-        response = self.client.get(MANUFACTURER_URL)
+        topics = Topic.objects.all()
+        response = self.client.get(TOPIC_URL)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            list(response.context["manufacturer_list"]),
-            list(manufacturers)
+            list(response.context["topic_list"]),
+            list(topics)
         )
-        self.assertTemplateUsed(response, "taxi/manufacturer_list.html")
+        self.assertTemplateUsed(response, "agency/topic_list.html")
 
-    def test_retrieve_cars(self):
-        manufacturer = Manufacturer.objects.create(
+    def test_retrieve_newspaper(self):
+        topic = Topic.objects.create(
             name="test",
-            country="Test"
         )
-        Car.objects.create(
-            model="test1",
-            manufacturer=manufacturer
+        Newspaper.objects.create(
+            title="test1",
+            topic=topic
         )
-        Car.objects.create(
-            model="test2",
-            manufacturer=manufacturer
+        Newspaper.objects.create(
+            title="test2",
+            topic=topic
         )
-        cars = Car.objects.all()
-        response = self.client.get(CAR_URL)
+        newspapers = Newspaper.objects.all()
+        response = self.client.get(NEWSPAPER_URL)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(list(response.context["car_list"]), list(cars))
-        self.assertTemplateUsed(response, "taxi/car_list.html")
+        self.assertEqual(list(response.context["newspaper-list"]), list(newspapers))
+        self.assertTemplateUsed(response, "agency/newspaper_list.html")
 
-    def test_retrieve_drivers(self) -> None:
+    def test_retrieve_redactors(self) -> None:
         get_user_model().objects.create_user(
             username="test123",
             password="test1234",
-            license_number="TST12345",
+            years_of_experience="3",
         )
         get_user_model().objects.create_user(
             username="test1234",
             password="test1234",
-            license_number="TST12346",
+            years_of_experience="1",
         )
-        drivers = Driver.objects.all()
-        response = self.client.get(DRIVER_URL)
+        redactors = Redactor.objects.all()
+        response = self.client.get(REDACTOR_URL)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(list(response.context["driver_list"]), list(drivers))
-        self.assertTemplateUsed(response, "taxi/driver_list.html")
+        self.assertEqual(list(response.context["redactor_list"]), list(redactors))
+        self.assertTemplateUsed(response, "agency/redactor_list.html")

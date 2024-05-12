@@ -1,66 +1,64 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.models import Car, Manufacturer
+from agency.models import Newspaper, Topic
 
 
-class DriverModelTests(TestCase):
+class RedactorModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         get_user_model().objects.create(
             username="test",
             password="test1234",
-            license_number="TST12345"
+            years_of_experience="2"
         )
 
-    def test_driver_str(self):
-        driver = get_user_model().objects.get(id=1)
+    def test_redactor_str(self):
+        redactor = get_user_model().objects.get(id=1)
         self.assertEqual(
-            str(driver),
-            f"{driver.username} ({driver.first_name} {driver.last_name})"
+            str(redactor),
+            f"{redactor.username} ({redactor.first_name} {redactor.last_name})"
         )
 
     def test_get_absolute_url(self):
-        driver = get_user_model().objects.get(id=1)
+        redactor = get_user_model().objects.get(id=1)
         self.assertEqual(
-            driver.get_absolute_url(), "/drivers/1/"
+            redactor.get_absolute_url(), "/redactor/1/"
         )
 
 
-class ManufacturerModelTests(TestCase):
+class TopicModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        Manufacturer.objects.create(
+        Topic.objects.create(
             name="test_name",
-            country="test_country"
         )
 
-    def test_manufacturer_str(self):
-        manufacturer = Manufacturer.objects.get(id=1)
+    def test_topic_str(self):
+        topic = Topic.objects.get(id=1)
         self.assertEqual(
-            str(manufacturer),
-            f"{manufacturer.name} {manufacturer.country}"
+            str(topic),
+            f"{topic.name}"
         )
 
 
-class CarModelTests(TestCase):
+class NewspaperModelTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        manufacturer = Manufacturer.objects.create(
+        topic = Topic.objects.create(
             name="test_name",
-            country="test_country"
         )
-        driver = get_user_model().objects.create(
+        redactor = get_user_model().objects.create(
             username="test",
             password="test1234",
-            license_number="TST12345"
+            years_of_experience="2"
         )
-        car = Car.objects.create(
+        newspaper = Newspaper.objects.create(
             model="test_model",
-            manufacturer=manufacturer
+            topic=topic
         )
-        car.drivers.add(driver)
+        newspaper.redactors.add(redactor)
 
-    def test_car_str(self):
-        car = Car.objects.get(id=1)
-        self.assertEqual(str(car), car.model)
+    def test_newspaper_str(self):
+        newspaper = Newspaper.objects.get(id=1)
+        self.assertEqual(str(newspaper), newspaper.title)

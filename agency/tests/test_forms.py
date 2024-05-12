@@ -1,12 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from taxi.forms import (
-    CarSearchForm,
-    DriverCreationForm,
-    DriverSearchForm,
-    DriverLicenseUpdateForm,
-    ManufacturerSearchForm
+from agency.forms import (
+    NewspaperSearchForm,
+    RedactorCreationForm,
+    RedactorSearchForm,
+    TopicSearchForm,
 )
 
 
@@ -17,45 +16,37 @@ class FormTests(TestCase):
             password="test1234",
         )
 
-    def test_driver_creation_form(self):
-        form = DriverCreationForm(
+    def test_redactor_creation_form(self):
+        form = RedactorCreationForm(
             data={
                 "username": "test_username",
                 "password1": "test_password",
                 "password2": "test_password",
-                "license_number": "VPN99999",
+                "years_of_experience": "3",
                 "first_name": "test_first",
                 "last_name": "test_last"
             }
         )
         self.assertTrue(form.is_valid())
 
-    def test_driver_search_form(self):
-        form = DriverSearchForm(
+    def test_redactor_search_form(self):
+        form = RedactorSearchForm(
             data={
                 "username": "test_username"
             }
         )
         self.assertTrue(form.is_valid())
 
-    def test_driver_license_update_form(self):
-        form = DriverLicenseUpdateForm(
+    def test_newspaper_search_form(self):
+        form = NewspaperSearchForm(
             data={
-                "license_number": "VPN99999"
+                "title": "test"
             }
         )
         self.assertTrue(form.is_valid())
 
-    def test_car_search_form(self):
-        form = CarSearchForm(
-            data={
-                "model": "test"
-            }
-        )
-        self.assertTrue(form.is_valid())
-
-    def test_manufacturer_search_form(self):
-        form = ManufacturerSearchForm(
+    def test_topic_search_form(self):
+        form = TopicSearchForm(
             data={
                 "name": "Test"
             }
