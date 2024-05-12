@@ -1,3 +1,7 @@
 .idea/
 venv
 NewspaperAgency/__pycache__/
+__pycache__/
+local_settings.py
+NewspaperAgency/settings_secret.py
+newspaper_agency_db_data.json
