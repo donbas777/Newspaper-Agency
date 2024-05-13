@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Topic, Redactor, Newspaper
-from .forms import (
+from agency.models import Topic, Redactor, Newspaper
+from agency.forms import (
     RedactorCreationForm,
     NewspaperForm,
     TopicSearchForm,
