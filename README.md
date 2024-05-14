@@ -4,7 +4,7 @@ Django project for newspapers and redactors in agency
 
 ## Check it out
 
-[NewspaperAgency project deployed to Render](https://newspaper-agency)
+[NewspaperAgency project deployed to Render](https://newspaper-agency-lry0.onrender.com)
 
 ## Installation
 
