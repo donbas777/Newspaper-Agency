@@ -34,5 +34,12 @@
       <jdbc-url>jdbc:sqlite:C:\Users\HP\Desktop\Python\projects\Django\prog7\py-taxi-service-search-and-tests\db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="newspaper_agency" uuid="5989b327-3316-429a-bda7-9dff1c947f11">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ep-blue-silence-a2qs79nc.eu-central-1.aws.neon.tech:5432/newspaper_agency</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
