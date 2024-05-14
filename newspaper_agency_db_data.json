@@ -1,0 +1,20 @@
+[{
+"model":"agency.redactor",
+    "pk": 2,
+    "fields": {
+      "password": "admin12renat",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "byers",
+      "first_name": "Joyce",
+      "last_name": "Byers",
+      "email": "joyce.byers@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T14:17:04Z",
+      "years_of_experience": "8",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
