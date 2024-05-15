@@ -1,29 +1,62 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
+{% load crispy_forms_filters %}
+
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
 
 {% block content %}
-  <h1>
-    Username: {{ redactor.username }}
-    <a href="{% url 'agency:redactor-delete' pk=redactor.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-  </h1>
+    <header class="header-2">
+        <div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">{{ redactor.username }}</h1>
+                        <p class="lead text-white mt-3">Explore the profile of our esteemed redactor.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-  <p><strong>First name:</strong> {{ redactor.first_name }}</p>
-  <p><strong>Last name:</strong> {{ redactor.last_name }}</p>
-  <p><strong>Years of experience:</strong> {{ redactor.years_of_experience }}</p>
-  <p><strong>Is staff:</strong> {{ redactor.is_staff }}</p>
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <p><strong>Full Name:</strong> {{ redactor.first_name }} {{ redactor.last_name }}</p>
+                    <p><strong>Years of Experience:</strong> {{ redactor.years_of_experience }}</p>
+                    <p><strong>Email:</strong> {{ redactor.email }}</p>
+                    <p><strong>Is staff:</strong> {{ redactor.is_staff|yesno:"Yes,No" }}</p>
+                    <div>
+                        <h3>Newspapers:</h3>
+                        {% if redactor.newspaper_set.all %}
+                            {% for newspaper in redactor.newspaper_set.all %}
+                                <div>
+                                    <p>id: {{ newspaper.id }}</p>
+                                    <p><strong>Title:</strong> <a href="{% url 'pulse:newspaper-detail' pk=newspaper.id %}">{{ newspaper.title }}</a></p>
+                                    <p><strong>Published Date:</strong> {{ newspaper.published_date }}</p>
+                                    <p><strong>Topics:</strong> {{ newspaper.topic.all|join:", " }}</p>
+                                </div>
+                                <hr>
+                            {% empty %}
+                                <p>No Newspapers!</p>
+                            {% endfor %}
+                        {% else %}
+                            <p>No Newspapers!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
 
-  <div class="ml-3">
-    <h4>Newspapers</h4>
-
-    {% for newspaper in redactor.newspapers.all %}
-        <hr>
-        <p><strong>Title:</strong> {{ newspaper.title }}</p>
-        <p><strong>Topic:</strong> {{ newspaper.topic.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{newspaper.id}}</p>
-
-    {% empty %}
-      <p>No newspapers!</p>
-    {% endfor %}
-  </div>
-{% endblock %}
+{% block javascripts %}
+    <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}

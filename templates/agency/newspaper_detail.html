@@ -1,42 +1,61 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
+{% load crispy_forms_filters %}
+
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
 
 {% block content %}
-  <h1>
-    {{ newspaper.title }}
-    <a href="{% url 'agency:newspaper-delete' pk=newspaper.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+<header class="header-2">
+    <div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6 text-center text-lg-left">
+                    <h1 class="text-white pt-3 mt-n5">Title: {{ newspaper.title }}</h1>
+                </div>
+                <div class="col-lg-6 d-flex justify-content-lg-end justify-content-center mt-4 mt-lg-0">
+                    <a class="btn btn-secondary" href="{% url 'pulse:newspaper-update' pk=newspaper.id %}">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
-    <a href="{% url 'agency:newspaper-update' pk=newspaper.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-  </h1>
-  <p>Topic: ({{ newspaper.topic.name }}</p>
-  <h1>
-    Redactors
+<section class="pt-3 pb-4" id="count-stats">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                <p><strong>Published Date:</strong> {{ newspaper.published_date }}</p>
+                <p><strong>Content:</strong> {{ newspaper.content|linebreaks }}</p>
+                <div>
+                    <h3>Topics:</h3>
+                    {% for topic in newspaper.topic.all %}
+                        <p>{{ topic.name }}</p>
+                    {% empty %}
+                        <p>No topics listed!</p>
+                    {% endfor %}
+                </div>
+                <div>
+                    <h3>Publishers:</h3>
+                    {% for redactor in newspaper.publishers.all %}
+                        <hr>
+                        <p>{{ redactor.first_name }} {{ redactor.last_name }} ({{ redactor.years_of_experience }} years of experience)</p>
+                    {% empty %}
+                        <p>No publishers!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
 
-    {% if newspaper in user.newspapers.all %}
-      <a href="{% url 'agency:toggle-newspaper-assign' pk=newspaper.id %}" class="btn btn-danger link-to-page">
-        Delete me from this newspaper
-      </a>
-    {% else %}
-      <a href="{% url 'agency:toggle-newspaper-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this newspaper
-      </a>
-    {% endif %}
-
-  </h1>
-  <hr>
-  <div>
-    {{ newspaper.content }}
-  </div>
-  <ul>
-    {% for redactor in newspaper.publishers.all %}
-      <li>{{ redactor.username }} ({{ redactor.first_name }} {{ redactor.last_name }})</li>
-    {% endfor %}
-  </ul>
-  <hr>
-  <ul>
-    {{ newspaper.published_date }}
-  </ul>
-{% endblock %}
+{% block javascripts %}
+<script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+<script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+<script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+<script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+<script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}

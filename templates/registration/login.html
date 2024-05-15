@@ -1,24 +1,53 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 {% load crispy_forms_filters %}
 
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
+
 {% block content %}
+    <header class="header-2">
+        <div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">Login</h1>
+                        <p class="lead text-white mt-3">Access your account</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-{% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <form action="{% url 'login' %}" method="post" class="form">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                Invalid credentials
+                            </div>
+                        {% endif %}
+                        {{ form|crispy }}
+                        <div class="text-center">
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
 
-<h1>Login</h1>
-
-{% if next %}
-  <p>Please log in to see this page.</p>
-{% endif %}
-
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-
-  <input type="submit" value="Login" class="btn btn-primary" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-{% endblock %}
+{% block javascripts %}
+    <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}

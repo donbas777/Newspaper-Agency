@@ -1,35 +1,107 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 {% load crispy_forms_filters %}
 
-{% block content %}
-    <h1>
-      Redactor List
-      <a href="{% url 'agency:redactor-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
-    {% include "includes/search_form.html" %}
-    {% if redactor_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Years of experience</th>
-      </tr>
-    {% for redactor in redactor_list %}
-      <tr>
-        <td>{{ redactor.id }}</td>
-        <td><a href="{{ redactor.get_absolute_url }}">{{ redactor.username }} {% if user == redactor %} (Me){% endif %}</a></td>
-        <td>{{ redactor.first_name }}</td>
-        <td>{{ redactor.last_name }}</td>
-        <td>{{ redactor.years_of_experience }}</td>
-      </tr>
-    {% endfor %}
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
 
-    </table>
-    {% else %}
-      <p>There are no redactors in the service.</p>
-    {% endif %}
-{% endblock %}
+{% block body_class %} index-page {% endblock body_class %}
+
+{% block content %}
+    <header class="header-2">
+        <div class="page-header section-height-75 relative"
+             style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">Redactors List</h1>
+                        <p class="lead text-white mt-3">Meet our experienced redactors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <a class="btn btn-success" href="{% url 'agency:redactor-create' %}" style="margin-bottom: 20px;">Add
+                        New Redactor</a>
+                    {% if redactor_list %}
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Years of Experience</th>
+                                <th>Email</th>
+                                <th>Details</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for redactor in redactor_list %}
+                                <tr>
+                                    <td>{{ redactor.id }}</td>
+                                    <td>{{ redactor.username }}</td>
+                                    <td>{{ redactor.years_of_experience }}</td>
+                                    <td>{{ redactor.email }}</td>
+                                    <td><a class="btn btn-info" href="{% url 'agency:redactor-detail' pk=redactor.id %}">Details</a>
+                                    </td>
+                                    <td><a class="btn btn-danger"
+                                           href="{% url 'agency:redactor-delete' pk=redactor.id %}">Delete</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if is_paginated %}
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-primary justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                               aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&laquo;</span>
+                                        </li>
+                                    {% endif %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+                                    </li>
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                               aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&raquo;</span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    {% else %}
+                        <p>No redactors available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+{% block javascripts %}
+    <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}

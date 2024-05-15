@@ -1,12 +1,47 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 {% load crispy_forms_filters %}
 
-{% block content %}
-  <h1>{{ object|yesno:"Update,Create" }} topic</h1>
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
-    {{ form|crispy }}
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
 
-    <input type="submit" value="Submit" class="btn btn-primary">
-  </form>
-{% endblock %}
+{% block body_class %} index-page {% endblock body_class %}
+
+{% block content %}
+    <header class="header-2">
+        <div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">{{ object|default:"Create" }} Topic</h1>
+                        <p class="lead text-white mt-3">Please fill in the form to {{ object|default:"create" | lower }} a new topic.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <form action="" method="post" novalidate>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="text-center">
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+{% block javascripts %}
+    <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}

@@ -1,10 +1,48 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
+{% load crispy_forms_filters %}
+
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
 
 {% block content %}
-  <h1>Delete newspaper?</h1>
-  <form action="" method="post">
-    {% csrf_token %}
+    <header class="header-2">
+        <div class="page-header section-height-75 relative" style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">Delete Newspaper</h1>
+                        <p class="lead text-white mt-3">Confirm deletion of the newspaper.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <input type="submit" value="Yes" class="btn btn-danger">
-  </form>
-{% endblock %}
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <p>Are you sure you want to delete the newspaper titled "{{ newspaper.title }}"?</p>
+                    <form action="{% url 'agency:newspaper-delete' pk=newspaper.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <input type="submit" value="Yes, delete" class="btn btn-danger" />
+                            <a href="{% url 'agency:newspaper-list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+{% block javascripts %}
+    <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}

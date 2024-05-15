@@ -1,24 +1,119 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
 {% load crispy_forms_filters %}
 
+{% block stylesheets %}
+    <!-- Additional CSS for this page -->
+{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
+
 {% block content %}
-  <h1>
-    Newspaper list
-    <a href="{% url 'agency:newspaper-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
-  </h1>
-  {% include "includes/search_form.html" %}
-  {% if newspaper_list %}
-    <ul>
-      {% for newspaper in newspaper_list %}
-        <li>
-          <a href="{% url "agency:newspaper-detail" pk=newspaper.id %} ">{{ newspaper.id }}</a>
-          {{ newspaper.title }} {{ newspaper.topic.name }} ({{ newspaper.published_date }}) ({{ newspaper.publishers }})
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no newspaper in agency</p>
-  {% endif %}
-{% endblock %}
+    <header class="header-2">
+        <div class="page-header section-height-75 relative"
+             style="background-image: url('{{ ASSETS_ROOT }}/img/curved-images/curved11.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto">
+                        <h1 class="text-white pt-3 mt-n5">Newspaper List</h1>
+                        <p class="lead text-white mt-3">Browse our comprehensive list of newspapers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <form action="" method="get" class="form-inline d-flex align-items-center mr-2">
+                            {{ search_form|crispy }}
+                            <button type="submit" class="btn btn-primary ms-2">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                        </form>
+                        <a class="btn btn-success" href="{% url 'agency:newspaper-create' %}" style="margin-left: 10px;">Add
+                            New Newspaper</a>
+                    </div>
+                    {% if newspaper_list %}
+                        <table class="table mt-3">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Published Date</th>
+                                <th>Topics</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for newspaper in newspaper_list %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'agency:newspaper-detail' pk=newspaper.id %}">{{ newspaper.id }}</a>
+                                    </td>
+                                    <td>{{ newspaper.title }}</td>
+                                    <td>{{ newspaper.published_date }}</td>
+                                    <td>{{ newspaper.topic.all|join:", " }}</td>
+                                    <td>
+                                        <a href="{% url 'agency:newspaper-update' pk=newspaper.id %}"
+                                           class="btn btn-primary">Edit</a>
+                                        <a href="{% url 'agency:newspaper-delete' pk=newspaper.id %}"
+                                           class="btn btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if is_paginated %}
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-primary justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                               aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&laquo;</span>
+                                        </li>
+                                    {% endif %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+                                    </li>
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+                                               aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&raquo;</span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    {% else %}
+                        <p>No newspapers available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+    <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+    <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+{% endblock javascripts %}
