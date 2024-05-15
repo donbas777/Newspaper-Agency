@@ -6,6 +6,11 @@ Django project for newspapers and redactors in agency
 
 [NewspaperAgency project deployed to Render](https://newspaper-agency-lry0.onrender.com)
 
+## Test User
+
+* Login: user
+* Password: user12345
+
 ## Installation
 
 Python3 must be installed
